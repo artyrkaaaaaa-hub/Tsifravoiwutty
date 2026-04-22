@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>Цифровой Щит | Защита от мошенников</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-white: #ffffff;
+      --bg-soft: #faf7ff;
+      --accent-light: #c4b5fd;
+      --accent-main: #8b5cf6;
+      --accent-deep: #7c3aed;
+      --accent-dark: #6d28d9;
+      --text-dark: #1e1b4b;
+      --text-soft: #6b7280;
+      --border-light: #f3e8ff;
+      --shadow-xs: 0 2px 8px rgba(139, 92, 246, 0.06);
+      --shadow-sm: 0 8px 30px rgba(139, 92, 246, 0.1);
+      --shadow-md: 0 20px 40px rgba(139, 92, 246, 0.15);
+      --gradient-bg: linear-gradient(135deg, #f3e8ff 0%, #ede9fe 50%, #fae8ff 100%);
+      --gradient-primary: linear-gradient(135deg, #8b5cf6, #a855f7);
+      --gradient-title: linear-gradient(135deg, #7c3aed, #c084fc, #a855f7);
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--gradient-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 40%, rgba(139, 92, 246, 0.1), transparent 60%);
+      pointer-events: none;
+      animation: violetAurora 15s infinite alternate;
+    }
+
+    @keyframes violetAurora {
+      0% { opacity: 0.3; transform: translate(0, 0) rotate(0deg); }
+      100% { opacity: 0.7; transform: translate(2%, 1%) rotate(1deg); }
+    }
+
+    .glass-violet {
+      max-width: 420px;
+      width: 100%;
+      height: 780px;
+      background: rgba(255, 255, 255, 0.97);
+      backdrop-filter: blur(2px);
+      border-radius: 48px;
+      box-shadow: var(--shadow-md), 0 0 0 1px rgba(139, 92, 246, 0.2) inset;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .glass-violet::before {
+      content: '';
+      position: absolute;
+      inset: 2px;
+      border-radius: 46px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.6), rgba(199, 170, 255, 0.2));
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .violet-header {
+      padding: 1.2rem 1.2rem 0.8rem;
+      background: linear-gradient(135deg, #ffffff, #faf5ff);
+      border-bottom: 2px solid rgba(139, 92, 246, 0.3);
+      position: relative;
+      z-index: 2;
+    }
+
+    .header-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .logo-violet {
+      font-family: 'Space Grotesk', monospace;
+      font-weight: 800;
+      font-size: 1rem;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -0.5px;
+    }
+
+    .badge-violet {
+      background: var(--gradient-primary);
+      padding: 0.2rem 0.7rem;
+      border-radius: 30px;
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 700;
+    }
+
+    .chapters-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      padding: 0.5rem 0 0 0;
+    }
+
+    .selection-title {
+      text-align: center;
+      font-family: 'Space Grotesk', monospace;
+      font-weight: 700;
+      font-size: 1.1rem;
+      background: var(--gradient-title);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 0.5rem;
+      padding: 0 1rem;
+      letter-spacing: -0.3px;
+    }
+
+    .story-image-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 0.5rem;
+    }
+    .story-image {
+      width: 200px;
+      height: auto;
+      border-radius: 0;
+      mix-blend-mode: multiply;
+      display: block;
+    }
+
+    .horizontal-scroll-area {
+      flex: 1;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 0.5rem 0.5rem 0.5rem 1rem;
+      margin-top: 0.2rem;
+      position: relative;
+      z-index: 2;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .horizontal-scroll-area::-webkit-scrollbar {
+      height: 4px;
+    }
+    .horizontal-scroll-area::-webkit-scrollbar-track {
+      background: #e9d5ff;
+      border-radius: 10px;
+      margin: 0 1rem;
+    }
+    .horizontal-scroll-area::-webkit-scrollbar-thumb {
+      background: var(--accent-main);
+      border-radius: 10px;
+    }
+
+    .chapters-horizontal {
+      display: flex;
+      flex-direction: row;
+      gap: 1rem;
+      padding-right: 1rem;
+    }
+
+    .chapter-card {
+      flex-shrink: 0;
+      width: 160px;
+      background: white;
+      border-radius: 28px;
+      padding: 1.5rem 0.8rem;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid rgba(139, 92, 246, 0.15);
+      transition: all 0.25s;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .chapter-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--accent-main);
+      box-shadow: 0 15px 30px -12px rgba(139, 92, 246, 0.25);
+    }
+
+    .chapter-card.completed {
+      border-color: #7c3aed;
+      background: linear-gradient(135deg, #faf5ff, #ffffff);
+    }
+
+    .chapter-emoji {
+      font-size: 3rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .chapter-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text-dark);
+      margin-bottom: 0.3rem;
+      line-height: 1.3;
+    }
+
+    .chapter-badge {
+      font-size: 0.65rem;
+      color: var(--accent-main);
+      background: #f3e8ff;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      display: inline-block;
+      margin-top: 0.4rem;
+    }
+
+    .completed-badge {
+      background: var(--gradient-primary);
+      color: white;
+    }
+
+    .progress-bar-violet {
+      background: #e9d5ff;
+      border-radius: 20px;
+      height: 6px;
+      overflow: hidden;
+      margin-top: 0.8rem;
+    }
+    .progress-fill-violet {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent-main), var(--accent-deep));
+      border-radius: 20px;
+      transition: width 0.5s;
+    }
+
+    .scroll-violet {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 0.8rem 1.2rem;
+      position: relative;
+      z-index: 2;
+    }
+    .scroll-violet::-webkit-scrollbar {
+      width: 3px;
+    }
+    .scroll-violet::-webkit-scrollbar-track {
+      background: #e9d5ff;
+      border-radius: 10px;
+    }
+    .scroll-violet::-webkit-scrollbar-thumb {
+      background: var(--accent-main);
+      border-radius: 10px;
+    }
+
+    .slide-violet {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      animation: violetFloat 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes violetFloat {
+      from { opacity: 0; transform: translateY(20px) scale(0.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .image-violet {
+      width: 100%;
+      height: auto;
+      max-height: 560px;
+      object-fit: contain;
+      border-radius: 32px;
+      box-shadow: 0 20px 40px -12px rgba(139, 92, 246, 0.3), 0 0 0 2px rgba(139, 92, 246, 0.15) inset;
+    }
+
+    .progress-violet {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      margin: 0.5rem 0 0.2rem;
+      padding: 0.3rem 0.8rem;
+      background: rgba(199, 170, 255, 0.3);
+      border-radius: 60px;
+      width: fit-content;
+      backdrop-filter: blur(8px);
+    }
+    .violet-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 3px;
+      background: #c4b5fd;
+      transition: all 0.3s;
+    }
+    .violet-dot.active {
+      width: 24px;
+      background: linear-gradient(90deg, var(--accent-main), var(--accent-deep));
+      box-shadow: 0 0 10px var(--accent-main);
+    }
+    .violet-text {
+      font-size: 0.7rem;
+      font-weight: 700;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .btn-violet-next {
+      background: var(--gradient-primary);
+      border: none;
+      padding: 0.9rem 1rem;
+      border-radius: 60px;
+      font-size: 1rem;
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.25s;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      margin-top: 0.1rem;
+      margin-bottom: 0;
+      box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+    }
+    .btn-violet-next:active {
+      transform: scale(0.97);
+    }
+
+    .btn-violet {
+      background: var(--gradient-primary);
+      border: none;
+      padding: 0.85rem 1rem;
+      border-radius: 60px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.2s;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+    }
+    .btn-violet:active {
+      transform: scale(0.98);
+    }
+
+    .card-violet {
+      background: white;
+      border-radius: 28px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: var(--shadow-xs);
+      border: 1px solid rgba(139, 92, 246, 0.15);
+    }
+
+    .option-violet {
+      background: white;
+      border-radius: 20px;
+      padding: 0.8rem 1rem;
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      cursor: pointer;
+      border: 1px solid rgba(139, 92, 246, 0.15);
+      transition: all 0.2s;
+      min-height: 70px;
+      width: 100%;
+    }
+
+    .option-violet:hover {
+      border-color: var(--accent-main);
+      transform: translateX(5px);
+      background: #faf5ff;
+    }
+
+    .option-violet.selected {
+      background: linear-gradient(135deg, #f3e8ff, #faf5ff);
+      border-color: var(--accent-main);
+      border-width: 1.5px;
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+    }
+
+    .option-letter-violet {
+      width: 40px;
+      min-width: 40px;
+      height: 40px;
+      background: var(--gradient-primary);
+      border-radius: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      color: white;
+      font-size: 1.1rem;
+      box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+      flex-shrink: 0;
+    }
+
+    .welcome-screen {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      text-align: center;
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .welcome-title {
+      font-family: 'Space Grotesk', monospace;
+      font-weight: 800;
+      font-size: 2.2rem;
+      background: var(--gradient-title);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 0.8rem;
+      letter-spacing: -0.02em;
+      animation: textShimmer 5s ease infinite;
+    }
+
+    @keyframes textShimmer {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .welcome-image {
+      width: 240px;
+      max-width: 80%;
+      height: auto;
+      margin: 0.5rem 0 1rem 0;
+      display: block;
+      transition: transform 0.3s ease;
+      animation: float 4s ease-in-out infinite;
+      mix-blend-mode: multiply;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+      100% { transform: translateY(0px); }
+    }
+
+    .welcome-image:hover {
+      transform: scale(1.02);
+    }
+
+    .welcome-subtitle {
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--accent-dark);
+      margin-bottom: 1.8rem;
+      line-height: 1.5;
+      padding: 0 0.5rem;
+    }
+
+    .welcome-btn {
+      background: var(--gradient-primary);
+      border: none;
+      padding: 0.9rem 1.5rem;
+      border-radius: 60px;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      color: white;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.3s ease;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+      letter-spacing: 0.5px;
+    }
+
+    .welcome-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4);
+    }
+
+    .welcome-btn:active {
+      transform: scale(0.97);
+    }
+
+    h2 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+
+    .flex-between { display: flex; justify-content: space-between; align-items: center; }
+    .text-center { text-align: center; }
+    .emoji-big { font-size: 2.5rem; }
+    .btn-group { display: flex; flex-direction: column; gap: 0.7rem; margin-top: 0.6rem; }
+  </style>
+</head>
+<body>
+  <div id="app" class="glass-violet"></div>
+
+  <script>
+    (function() {
+      const CHAPTER1_IMAGES = [
+        "https://i.postimg.cc/YqsQZXGC/Poo-FXt-TBgh94IYp-I6QQE-w9JLq-B0Qbt-Mu6k7JIWx-Yi3j-Wij-YN4e-B7vn-Gz-IBEl3Muw-Rwsrwmznreopfgf7DVq4gll.jpg",
+        "https://i.postimg.cc/2yBC68GN/Mu-GDQw-AFTS9u-Lqoq-6Szle-XPg-L5es-GDBI09ci-Jhx3L8An5m-Hw-ISq-RF2r-k0G-Lh-DVDwl-C2UMDJkw-FN077tqqug.jpg",
+        "https://i.postimg.cc/RCn3qMN7/68r-R1CKWJp8h-Rk-Yx-AJTLi4M12QARTx3g-J39x-P3-VTD-qqgs-1A7cd-KCb-VMERFj-Kc-Zb-SMB5I-x-Ea-Pntn-MUs9k-Q.jpg"
+      ];
+
+      const CHAPTER2_IMAGES = [
+        "https://i.postimg.cc/htvpjYRM/w-N6chkj24dyf-PKAu-PY71J8Kain-FUmk-Ljvz-GOkbu0o-Dd-Je-Zt7-2BPx0N12i-XFjo-Hut-FI90tzws9M0NEXJ4lj-Mm-B.jpg",
+        "https://i.postimg.cc/dDPw1CLn/b-NTit-Nhg-VGnl6fk-Kkwv-CF1vhrx-WS7i-g-Gej-L5QMqlkryv-Kk-A7S637OR-ry-Hdtu-6Wyr-VS0J1Hm-X7bhb-Wlk-RYY.jpg",
+        "https://i.postimg.cc/Njt2C9pT/vx-Hsz-E0W1P0Qd-Yw-Nh-HD9y-UDsy-5QEST-fj-Oy-SKu7D1j-B87t-Mpdkib91Ug-Zf-Yx-Ly-2P-giyb-OCQz-Onr-TZgv-J.jpg",
+        "https://i.postimg.cc/g2GrH925/po1Gq-Fvp-Jsh-TT8Lq-Zk-Np-Jm-Gwb9HSYGd-Rn7u-U1Fa-Hfe5Ei-Vr-Oh-No-Vijwjy-Jets-Agmv-Kr-Yfy-Dehp-K872Cw.jpg"
+      ];
+
+      const CHAPTER3_IMAGES = [
+        "https://i.postimg.cc/Zqpd24pB/Bs1kv00u-V49c9b-Jdm30h-Ss0KTEQDUxg-URAADKjl-l3JKOQ2LCHDRKp-Dyx5BPf54gp-KAHv5u-Vj-JDx-RAn-Uu-Zrg-JMSQ.jpg",
+        "https://i.postimg.cc/bvcGQWWv/Ak-Vum1Vw-E7Bah-Xg0N6yiqt-RXRKAOc-IAE0TABB4a2Ts-Ll1db-Iy-Ljq3FJW4TKw-Z6W26m-K-Hf9-Pya1Gy-V0s-Re6RQr.jpg",
+        "https://i.postimg.cc/X754wqbs/Qwxuujx-ZFu-07g-Dy-VQO18y-Tzf-Bb-MPy-L0igh-Z5k-WDe-A-Npf-ONDg-UMgfadszhc4OILRz-Gao6g-U34a-YGi-SRbqi.jpg",
+        "https://i.postimg.cc/3wxwCh9W/9AZcj-Ja-U1-YSNLLc-GYW7l-Og0ESu-EKTts3-s-Hj0CVf-Wmv-Xc-Z5Bydxa-JYXGWg-Zgg-3k6Sbq9NCLfe-L-489QSh5WYa.jpg"
+      ];
+
+      const CHAPTER4_IMAGES = [
+        "https://i.postimg.cc/TPdzHqyX/XCTGS5bh-fr-h-P-Cdt2Z7br0357Qvfb-Azsn-Fgbk-Fjx-Yk-Tfm-p-Le0Z9ahz9Dx-YDdjd2zxb-Dhw2ji-Awjj-Hcq-PLE0oi.jpg",
+        "https://i.postimg.cc/Dy1RvYsY/dc1l-Xm-Cb-Ot-CO1124px-Swg-YYORdu-Cf-WN4m-Uj-Gpat9KRCm-Quur-Ynw-QBg-WZhbcz-Xmt-VIb3xk6db-h4MP0Ajcitx.jpg",
+        "https://i.postimg.cc/kM19k5KK/IWPFF0Oi-Vlx0sal-MYf-Gxi1-Ri-OPllh-ME9IBq-Wz-KBnii-Uj8Qin-Gs8ZGR8os0x-F879REFlit-EJs-SGho-Hs-QRTj-E.jpg",
+        "https://i.postimg.cc/zvMs3VFP/h-KVUr-A8nnyt4sg-Ehf-PHWovwc93i591gn-IDn-R2kp-CECDxdu-Lp-Frra-N4Tn-VFjgwg-zebp-E9pt-Zy-JWWB-Jd-PQr-T.jpg"
+      ];
+
+      const CHAPTER5_IMAGES = [
+        "https://i.postimg.cc/Vk0GLMm9/3CJMc8Wzc-L-b-XRPom-Rb8-Zs1p-Sd-QKa-Qw-pw40Ie-Ajhavb-CBz-TJu-TAAqb6x8zpx6kk54m-PONa6sp-O9P6ju-PKGo-L.jpg",
+        "https://i.postimg.cc/pV8KTZF6/09j-Gd-h-Jph8-Q9Yk-LLCXGuq-PMVJ-ZIfekz-EQbi-Poohl-Xxq-G9c7f-UWibg-NY6Yw12p-GOrh-Ss-H9m-w-RE-ps-Ihud.jpg",
+        "https://i.postimg.cc/1XHtFfSd/P5Ch-F9x-KAKp88e2d4Ln34j9s1nz-Wmhfh-VV1Sa-Z9y2Erz-Is-SVFe-Om2Cm3-xgd-Qx5i6JJVcl-Law-IOMz-OFQV1KXx0l.jpg",
+        "https://i.postimg.cc/hjRP39tW/k6rfii-IRx3SVYg-74q9sd-Qafrmj-SJwwoo-Alf3g-WJt-Bau-qe-P5W-w-Azj-EPYQ-RGzq-VG5Mn-Vys-z9v42JUO0Kliv.jpg"
+      ];
+
+      const SELECTION_IMAGE = "https://i.postimg.cc/GpgmJH4g/Lw-Rj-L5Yf-Z9QFv1QXl4-d-Djalm-QBhaxwc-RTFu7U5WZ3fdw1XRYt-F0-oxd-CAfdn-AQIGfa-Ho0x1z50Ntom-H4W7rya.jpg";
+      const WELCOME_IMAGE = "https://i.postimg.cc/50Vq4nVv/j-FTJU-RA-S37n-BGa-GDt-BYPqhd-Y47jj-Skq-cx4g6LH-o-Oq-Mb-Ab-Wx-Bu7-v-TPLZio-EOs5AFFXYJPf-PAK-U-94z1pe.jpg";
+
+      const chapters = [
+        {
+          id: 1, emoji: "📦", title: "Посылка с сюрпризом", storyIntro: "", slides: CHAPTER1_IMAGES,
+          question: "Как поступить, если позвонили из подозрительной доставки?",
+          options: [
+            { id: "A", text: "Перейти по ссылке и установить приложение" },
+            { id: "B", text: "Положить трубку и проверить статус заказа на сайте «Маркетплейс»" },
+            { id: "C", text: "Спросить, почему нельзя отследить на сайте «Маркетплейс»" },
+            { id: "D", text: "Согласиться, но установить приложение позже" }
+          ],
+          correct: "B",
+          explanation: "Правильный ответ — положить трубку и самостоятельно проверить статус заказа на официальном сайте. Никогда не переходите по ссылкам от незнакомцев!"
+        },
+        {
+          id: 2, emoji: "🎧", title: "Голос из портала", storyIntro: "", slides: CHAPTER2_IMAGES,
+          question: "Что делать, если просят назвать код?",
+          options: [
+            { id: "A", text: "Продиктовать код, чтобы быстрее закончить" },
+            { id: "B", text: "Попросить перезвонить через час" },
+            { id: "C", text: "Положить трубку и проверить все данные на портале" },
+            { id: "D", text: "Потребовать у звонящего назвать номер приказа, на основании которого звонят" }
+          ],
+          correct: "C",
+          explanation: "Правильный ответ — положить трубку и самостоятельно проверить информацию на официальном портале. Никогда не сообщайте коды и пароли по телефону!"
+        },
+        {
+          id: 3,
+          emoji: "📱",
+          title: "Это по работе",
+          storyIntro: "",
+          slides: CHAPTER3_IMAGES,
+          question: "Что делать, если босс пишет с незнакомого номера?",
+          options: [
+            { id: "A", text: "Предложить перевести только часть суммы" },
+            { id: "B", text: "Сразу перевести всю сумму, чтобы помочь начальнику" },
+            { id: "C", text: "Позвонить на новый номер для проверки" },
+            { id: "D", text: "Написать в рабочий чат, чтобы уточнить ситуацию" }
+          ],
+          correct: "D",
+          explanation: "Правильный ответ — написать в рабочий чат, чтобы уточнить ситуацию. Никогда не переводите деньги по первому требованию в мессенджерах, даже если пишет начальник!"
+        },
+        {
+          id: 4,
+          emoji: "🔒",
+          title: "Дела особой важности",
+          storyIntro: "",
+          slides: CHAPTER4_IMAGES,
+          question: "Что делать, если просят перевести деньги на безопасный счет?",
+          options: [
+            { id: "A", text: "Положить трубку и самостоятельно позвонить в банк" },
+            { id: "B", text: "Предложить приехать в отдел для дачи показаний" },
+            { id: "C", text: "Перевести все деньги на указанный счёт" },
+            { id: "D", text: "Сообщить звонящему, что на счёте нет денег" }
+          ],
+          correct: "A",
+          explanation: "Правильный ответ — положить трубку и самостоятельно позвонить в банк по номеру с официального сайта. Никогда не переводите деньги на 'безопасные счета' — это классическая схема мошенников!"
+        },
+        {
+          id: 5, emoji: "💰", title: "Золотая лихорадка", storyIntro: "", slides: CHAPTER5_IMAGES,
+          question: "Что делать, если предлагают быстро разбогатеть?",
+          options: [
+            { id: "A", text: "Вложить небольшую пробную сумму для проверки" },
+            { id: "B", text: "Инвестировать крупную сумму, пока акция не закончилась" },
+            { id: "C", text: "Проверить компанию в официальном реестре Банка России" },
+            { id: "D", text: "Написать консультанту в чат, чтобы узнать подробности" }
+          ],
+          correct: "C",
+          explanation: "Правильный ответ — проверить компанию в официальном реестре Банка России. Никогда не вкладывайте деньги в сомнительные проекты!"
+        }
+      ];
+
+      chapters[0].correct = "B";
+      chapters[1].correct = "C";
+      chapters[2].correct = "D";
+      chapters[3].correct = "A";
+      chapters[4].correct = "C";
+
+      let currentScreen = 'welcome';
+      let activeChapter = null;
+      let gameStep = 'story';
+      let selectedAnswer = null;
+      let completedChapters = [];
+      let slideIndex = 0;
+
+      function saveComplete(id) { if (!completedChapters.includes(id)) completedChapters.push(id); }
+      
+      function burstConfetti() {
+        for (let i = 0; i < 70; i++) {
+          const el = document.createElement('div');
+          el.style.position = 'fixed';
+          el.style.width = '8px';
+          el.style.height = '12px';
+          el.style.background = `hsl(${Math.random() * 60 + 260}, 80%, 65%)`;
+          el.style.left = Math.random() * 100 + '%';
+          el.style.top = '-20px';
+          el.style.borderRadius = '2px';
+          el.style.pointerEvents = 'none';
+          el.style.zIndex = '9999';
+          document.body.appendChild(el);
+          const dur = Math.random() * 2 + 2;
+          el.animate([{ transform: 'translate(0,0) rotate(0deg)', opacity: 1 }, { transform: `translate(${Math.random() * 300 - 150}px, 800px) rotate(${Math.random() * 720}deg)`, opacity: 0 }], { duration: dur * 1000 });
+          setTimeout(() => el.remove(), dur * 1000);
+        }
+      }
+
+      function getNextUncompletedId() {
+        for (let i = 0; i < chapters.length; i++) {
+          if (!completedChapters.includes(chapters[i].id)) return chapters[i].id;
+        }
+        return 1;
+      }
+
+      function startChapter(id) {
+        activeChapter = chapters.find(c => c.id === id);
+        gameStep = 'story';
+        selectedAnswer = null;
+        slideIndex = 0;
+        currentScreen = 'game';
+        render();
+      }
+
+      function render() {
+        const root = document.getElementById('app');
+        if (!root) return;
+
+        if (currentScreen === 'welcome') {
+          root.innerHTML = `
+            <div class="welcome-screen">
+              <div class="welcome-title">Цифровой Щит</div>
+              <img class="welcome-image" src="${WELCOME_IMAGE}" alt="Цифровой Щит">
+              <div class="welcome-subtitle">Пройдите тест и узнайте, насколько хорошо вы защищены от мошенников</div>
+              <button class="welcome-btn" id="startBtn">Начать</button>
+            </div>
+          `;
+          document.getElementById('startBtn')?.addEventListener('click', () => {
+            currentScreen = 'chapters';
+            render();
+          });
+          return;
+        }
+
+        if (currentScreen === 'chapters') {
+          const progress = (completedChapters.length / chapters.length) * 100;
+          root.innerHTML = `
+            <div class="violet-header">
+              <div class="header-flex">
+                <span class="logo-violet">🛡️ Цифровой Щит</span>
+                <span class="badge-violet">${completedChapters.length}/${chapters.length}</span>
+              </div>
+              <div class="progress-bar-violet"><div class="progress-fill-violet" style="width:${progress}%;"></div></div>
+            </div>
+            <div class="chapters-content">
+              <div class="selection-title">Выберите историю для прохождения</div>
+              <div class="story-image-wrapper">
+                <img class="story-image" src="${SELECTION_IMAGE}" alt="Выберите историю" onerror="this.src='https://via.placeholder.com/200?text=История'">
+              </div>
+              <div class="horizontal-scroll-area">
+                <div class="chapters-horizontal">
+                  ${chapters.map(ch => `
+                    <div class="chapter-card ${completedChapters.includes(ch.id) ? 'completed' : ''}" data-id="${ch.id}">
+                      <div class="chapter-emoji">${ch.emoji}</div>
+                      <div class="chapter-title">${ch.title}</div>
+                      ${completedChapters.includes(ch.id) ? '<div class="chapter-badge completed-badge">✓ Пройдено</div>' : '<div class="chapter-badge">Глава ' + ch.id + '</div>'}
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+          `;
+          
+          document.querySelectorAll('.chapter-card').forEach(card => {
+            card.addEventListener('click', () => {
+              const id = parseInt(card.dataset.id);
+              startChapter(id);
+            });
+          });
+          return;
+        }
+
+        if (currentScreen === 'game' && activeChapter) {
+          const ch = activeChapter;
+
+          if (gameStep === 'story') {
+            if ((ch.id === 1 || ch.id === 2 || ch.id === 3 || ch.id === 4 || ch.id === 5) && ch.slides && ch.slides.length > 0) {
+              if (slideIndex < ch.slides.length) {
+                const total = ch.slides.length, current = slideIndex + 1;
+                root.innerHTML = `
+                  <div class="violet-header"><div class="header-flex"><span class="logo-violet">${ch.emoji} ${ch.title}</span><span class="badge-violet">${current}/${total}</span></div></div>
+                  <div class="scroll-violet" style="display: flex; flex-direction: column; justify-content: center;"><div class="slide-violet"><img class="image-violet" src="${ch.slides[slideIndex]}" onerror="this.src='https://via.placeholder.com/400x600?text=Ошибка'"><div class="progress-violet">${Array(total).fill(0).map((_, idx) => `<div class="violet-dot ${idx === slideIndex ? 'active' : ''}"></div>`).join('')}<span class="violet-text">${current}/${total}</span></div></div></div>
+                  <div style="padding: 0 1.2rem 1rem;"><button class="btn-violet-next" id="nextSlideBtn"><span>ДАЛЕЕ</span><span>→</span></button></div>
+                `;
+                document.getElementById('nextSlideBtn')?.addEventListener('click', () => { slideIndex++; render(); });
+                return;
+              } else { gameStep = 'question'; render(); return; }
+            }
+          }
+
+          if (gameStep === 'question') {
+            root.innerHTML = `<div class="violet-header"><div class="header-flex"><span class="logo-violet">🤔 Твой выбор</span><span class="badge-violet">Вопрос</span></div></div><div class="scroll-violet"><div class="card-violet" style="background:#faf5ff; margin-bottom:0.8rem;"><p style="font-weight:600;">${ch.question}</p></div>${ch.options.map(opt => `<div class="option-violet ${selectedAnswer === opt.id ? 'selected' : ''}" data-opt="${opt.id}"><div class="option-letter-violet">${opt.id}</div><span>${opt.text}</span></div>`).join('')}</div><div style="padding: 0 1.2rem 1rem;"><button class="btn-violet" id="confirmBtn" ${!selectedAnswer ? 'style="opacity:0.6;"' : ''}>Подтвердить</button></div>`;
+            document.querySelectorAll('.option-violet').forEach(el => { el.addEventListener('click', () => { selectedAnswer = el.dataset.opt; render(); }); });
+            document.getElementById('confirmBtn')?.addEventListener('click', () => { if (!selectedAnswer) return; const isCorrect = (selectedAnswer === ch.correct); if (isCorrect && !completedChapters.includes(ch.id)) { saveComplete(ch.id); burstConfetti(); } gameStep = 'result'; render(); });
+            return;
+          }
+
+          if (gameStep === 'result') {
+            const isWin = (selectedAnswer === ch.correct);
+            const correctOpt = ch.options.find(o => o.id === ch.correct);
+            root.innerHTML = `<div class="violet-header"><div class="header-flex"><span class="logo-violet">${isWin ? '🏆 ПОБЕДА' : '🔄 АНАЛИЗ'}</span><span class="badge-violet">Результат</span></div></div><div class="scroll-violet text-center"><div style="font-size:2.8rem;">${isWin ? '🏆✨' : '🔄💡'}</div><h2 style="color: ${isWin ? '#8b5cf6' : '#7c3aed'};">${isWin ? 'Совершенно верно!' : 'Почти получилось'}</h2><div class="card-violet" style="margin:1rem 0;"><p>${ch.explanation}</p><div class="flex-between" style="margin-top:0.6rem; background:#f3e8ff; border-radius:1rem; padding:0.5rem;"><div class="option-letter-violet" style="width:28px;height:28px;">${ch.correct}</div><span style="font-weight:500;">${correctOpt.text}</span></div></div></div><div class="btn-group" style="padding: 0 1.2rem 1rem;"><button class="btn-violet" id="backBtn">◀ К выбору главы</button>${ch.id < 5 ? '<button class="btn-violet" id="nextBtn">▶ Следующая глава</button>' : ''}</div>`;
+            document.getElementById('backBtn')?.addEventListener('click', () => { currentScreen = 'chapters'; render(); });
+            if (ch.id < 5) document.getElementById('nextBtn')?.addEventListener('click', () => { startChapter(ch.id + 1); });
+            return;
+          }
+        }
+      }
+      render();
+    })();
+  </script>
+</body>
+</html>
